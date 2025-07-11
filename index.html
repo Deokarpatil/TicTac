@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tic Tac Toe</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .main {
+        text-align: center;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .current-player {
+        font-weight: bold;
+        margin-bottom: 20px;
+        font-size: 18px;
+      }
+
+      .game {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .cell {
+        width: 100px;
+        height: 100px;
+        background: #e9e9e9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 36px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background 0.3s ease;
+      }
+
+      .cell:hover {
+        background: #d3d3d3;
+      }
+
+      .cell img.player {
+        width: 50px;
+        height: 50px;
+      }
+
+      .reset {
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .reset:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h1>Tic Tac Toe</h1>
+      <p class="current-player" id="current-player">Current Player: Player1</p>
+      <div class="game">
+        <div class="cell" onclick="makeMove(0)"></div>
+        <div class="cell" onclick="makeMove(1)"></div>
+        <div class="cell" onclick="makeMove(2)"></div>
+        <div class="cell" onclick="makeMove(3)"></div>
+        <div class="cell" onclick="makeMove(4)"></div>
+        <div class="cell" onclick="makeMove(5)"></div>
+        <div class="cell" onclick="makeMove(6)"></div>
+        <div class="cell" onclick="makeMove(7)"></div>
+        <div class="cell" onclick="makeMove(8)"></div>
+      </div>
+      <button type="button" class="reset" onclick="resetBoard()">Reset</button>
+    </div>
+
+    <script>
+      const board = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
+      let currentPlayer = "Player1";
+
+      const renderBoard = () => {
+        const allBoxes = document.querySelectorAll(".cell");
+        allBoxes.forEach((box, index) => {
+          if (board[index] === "Player2") {
+            box.innerHTML = '<img class="player" src="player2.png" alt="X" />';
+          } else if (board[index] === "Player1") {
+            box.innerHTML = '<img class="player" src="player1.png" alt="O" />';
+          } else {
+            box.innerHTML = "";
+          }
+        });
+      };
+
+      renderBoard();
+
+      const makeMove = (index) => {
+        if (board[index] !== -1) {
+          alert("Invalid Move");
+          return;
+        }
+
+        board[index] = currentPlayer;
+
+        if (currentPlayer === "Player1") {
+          currentPlayer = "Player2";
+        } else {
+          currentPlayer = "Player1";
+        }
+
+        document.getElementById("current-player").innerText = `Current Player: ${currentPlayer}`;
+        renderBoard();
+        checkWinner();
+      };
+
+      function resetBoard() {
+        board.fill(-1);
+        currentPlayer = "Player1";
+        document.getElementById("current-player").innerText = "Current Player: Player1";
+        renderBoard();
+      }
+
+      function isPlayerPresent(places, player) {
+        const [a, b, c] = places;
+        return board[a] === player && board[b] === player && board[c] === player;
+      }
+
+      function checkWinner() {
+        const winPatterns = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6],
+        ];
+
+        for (const pattern of winPatterns) {
+          if (isPlayerPresent(pattern, "Player1")) {
+            alert("Player1 wins");
+            return;
+          }
+          if (isPlayerPresent(pattern, "Player2")) {
+            alert("Player2 wins");
+            return;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
